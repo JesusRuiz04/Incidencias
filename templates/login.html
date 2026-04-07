@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Registro - Sistema de Incidencias</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <h1>🚗 Incidencias de Tráfico</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="auth-container">
+            <div class="auth-box">
+                <h2 id="title-login">Inicia Sesión</h2>
+                
+                <!-- FORMULARIO LOGIN -->
+                <form id="form-login" class="form-visible">
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <button type="submit" class="btn btn-primary">Inicia Sesión</button>
+                    <p class="toggle-text">
+                        ¿No tienes cuenta? 
+                        <a href="#" onclick="toggleForm(event)">Regístrate aquí</a>
+                    </p>
+                </form>
+
+                <!-- FORMULARIO REGISTRO -->
+                <form id="form-registro" class="form-hidden">
+                    <input type="text" placeholder="Nombre completo" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <input type="password" placeholder="Confirmar contraseña" required>
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                    <p class="toggle-text">
+                        ¿Ya tienes cuenta? 
+                        <a href="#" onclick="toggleForm(event)">Inicia sesión aquí</a>
+                    </p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sistema de Gestión de Incidencias de Tráfico</p>
+    </footer>
+
+    <script src="/static/js/auth.js"></script>
+</body>
+</html>
+

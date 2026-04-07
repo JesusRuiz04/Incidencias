@@ -1,0 +1,32 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Archivos de configuración privados
+.env
+*.local
+
+# Cache y temporales
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+
+# Base de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# Carpetas del sistema
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de datos
+data/
