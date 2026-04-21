@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login/Registro - Sistema de Incidencias</title>
+    <title>Autenticación - Sistema de Incidencias</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <div class="navbar-brand">
-                <h1>🚗 Incidencias de Tráfico</h1>
+                <h1>Incidencias Tráfico</h1>
             </div>
             <ul class="nav-links">
                 <li><a href="/">Inicio</a></li>
@@ -19,40 +20,99 @@
         </div>
     </nav>
 
-    <main class="container">
+    <!-- Main Auth Section -->
+    <main>
         <section class="auth-container">
             <div class="auth-box">
-                <h2 id="title-login">Inicia Sesión</h2>
-                
-                <!-- FORMULARIO LOGIN -->
-                <form id="form-login" class="form-visible">
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Contraseña" required>
-                    <button type="submit" class="btn btn-primary">Inicia Sesión</button>
+                <!-- Login Form -->
+                <div id="login-section">
+                    <h2>Inicia Sesión</h2>
+                    <form id="form-login">
+                        <input 
+                            type="email" 
+                            placeholder="Tu email" 
+                            required
+                            aria-label="Email">
+                        <input 
+                            type="password" 
+                            placeholder="Tu contraseña" 
+                            required
+                            aria-label="Contraseña">
+                        <button type="submit" class="btn btn-primary">
+                            Inicia Sesión
+                        </button>
+                    </form>
                     <p class="toggle-text">
                         ¿No tienes cuenta? 
-                        <a href="#" onclick="toggleForm(event)">Regístrate aquí</a>
+                        <a href="#" onclick="toggleForms(event)">Regístrate aquí</a>
                     </p>
-                </form>
+                </div>
 
-                <!-- FORMULARIO REGISTRO -->
-                <form id="form-registro" class="form-hidden">
-                    <input type="text" placeholder="Nombre completo" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Contraseña" required>
-                    <input type="password" placeholder="Confirmar contraseña" required>
-                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                <!-- Register Form -->
+                <div id="register-section" style="display: none;">
+                    <h2>Crea tu Cuenta</h2>
+                    <form id="form-registro">
+                        <input 
+                            type="text" 
+                            placeholder="Nombre completo" 
+                            required
+                            aria-label="Nombre">
+                        <input 
+                            type="email" 
+                            placeholder="Tu email" 
+                            required
+                            aria-label="Email">
+                        <input 
+                            type="password" 
+                            placeholder="Contraseña" 
+                            required
+                            aria-label="Contraseña">
+                        <input 
+                            type="password" 
+                            placeholder="Confirmar contraseña" 
+                            required
+                            aria-label="Confirmar contraseña">
+                        <button type="submit" class="btn btn-primary">
+                            Registrarse
+                        </button>
+                    </form>
                     <p class="toggle-text">
                         ¿Ya tienes cuenta? 
-                        <a href="#" onclick="toggleForm(event)">Inicia sesión aquí</a>
+                        <a href="#" onclick="toggleForms(event)">Inicia sesión aquí</a>
                     </p>
-                </form>
+                </div>
             </div>
         </section>
     </main>
 
+    <script>
+        function toggleForms(event) {
+            event.preventDefault();
+            const loginSection = document.getElementById('login-section');
+            const registerSection = document.getElementById('register-section');
+            
+            loginSection.style.display = loginSection.style.display === 'none' ? 'block' : 'none';
+            registerSection.style.display = registerSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Handle forms submission
+        document.getElementById('form-login').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Login: Funcionalidad en desarrollo');
+        });
+
+        document.getElementById('form-registro').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Registro: Funcionalidad en desarrollo');
+        });
+    </script>
+</body>
+</html>
+        </section>
+    </main>
+
     <footer>
-        <p>&copy; 2024 Sistema de Gestión de Incidencias de Tráfico</p>
+        <p>&copy; 2026 Sistema de Gestión de Incidencias de Tráfico</p>
     </footer>
 
     <script src="/static/js/auth.js"></script>
