@@ -22,10 +22,11 @@ class Usuario(Base):
     nombre = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
+    es_admin = Column(Integer, default=0)  # 0 = usuario normal, 1 = admin
     fecha_creacion = Column(DateTime, default=datetime.now)
     
     def __repr__(self):
-        return f"<Usuario(nombre='{self.nombre}', email='{self.email}')>"
+        return f"<Usuario(nombre='{self.nombre}', email='{self.email}', es_admin={self.es_admin})>"
 
 
 class Incidencia(Base):
@@ -38,6 +39,9 @@ class Incidencia(Base):
     ubicacion = Column(String(200), nullable=False)
     tipo = Column(String(50), nullable=False)  # semaforo, bache, poste, etc
     estado = Column(String(50), nullable=False)  # abierto, cerrado, en_progreso
+    prioridad = Column(String(20), default="media")  # baja, media, alta
+    fotos = Column(String(500))  # URLs de fotos separadas por comas
+    usuario_id = Column(Integer)  # ID del usuario que creó la incidencia
     fecha_creacion = Column(DateTime, default=datetime.now)
     
     def __repr__(self):

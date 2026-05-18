@@ -3,29 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Incidencias de Tráfico</title>
+    <meta name="description" content="Sistema de gestión de incidencias de tráfico en tiempo real">
+    <meta name="keywords" content="tráfico, incidencias, reportes, seguridad vial">
+    <title>{% block title %}Sistema de Incidencias de Tráfico{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-brand">
-                <h1>🚗 Incidencias de Tráfico</h1>
+                <a href="/" class="logo">
+                    <i class="fas fa-road"></i>
+                    <span>IncidenciasTrafico</span>
+                </a>
             </div>
+            
             <ul class="nav-links">
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Inicio</a></li>
+                {% if usuario %}
+                    <li><span class="nav-link" style="cursor: default; color: #E7622D; font-weight: 600;">
+                        <i class="fas fa-user-circle"></i> {{ usuario.nombre }}
+                    </span></li>
+                    <li><a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                {% else %}
+                    <li><a href="/login" class="nav-link"><i class="fas fa-sign-in-alt"></i> Acceder</a></li>
+                {% endif %}
+                <li><a href="#" class="nav-link"><i class="fas fa-info-circle"></i> Ayuda</a></li>
             </ul>
+
+            <button class="mobile-toggle">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
-    <main class="container">
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}
         <!-- Contenido específico de cada página -->
+        {% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2024 Sistema de Gestión de Incidencias de Tráfico</p>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Sobre nosotros</h4>
+                    <p>Sistema de gestión de incidencias de tráfico para reportar problemas en tiempo real y mejorar la seguridad vial.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces rápidos</h4>
+                    <ul>
+                        <li><a href="/">Inicio</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                        <li><a href="#privacidad">Privacidad</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p>Email: <a href="mailto:info@incidenciastrafico.com">info@incidenciastrafico.com</a></p>
+                    <p>Teléfono: <a href="tel:+34900000000">+34 900 000 000</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Sistema de Gestión de Incidencias de Tráfico. Todos los derechos reservados.</p>
+            </div>
+        </div>
     </footer>
+
+    <script src="/static/js/auth.js"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
 

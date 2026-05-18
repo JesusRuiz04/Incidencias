@@ -33,42 +33,5 @@ def validar_fuerza_password(password: str) -> bool:
     return tiene_mayuscula and tiene_minuscula and tiene_numero
 
 
-def hashear_password(password: str) -> str:
-    """Crea un hash simple de la contraseña."""
-    hash_simple = ""
-    for letra in password:
-        hash_simple = hash_simple + str(ord(letra))
-    return hash_simple
 
-
-def crear_usuario(nombre: str, email: str, password: str):
-    """Crea un usuario si los datos son válidos."""
-    # Validar nombre
-    if not nombre or len(nombre) < 2:
-        return None
-    
-    # Validar email
-    if not validar_email(email):
-        return None
-    
-    # Validar password
-    if not validar_fuerza_password(password):
-        return None
-    
-    # Crear usuario
-    usuario = {
-        "nombre": nombre,
-        "email": email,
-        "password_hash": hashear_password(password)
-    }
-    
-    return usuario
-
-def validar_email(email: str) -> bool:
-    """Valida si el formato del email es correcto."""
-    return "@" in email and "." in email
-
-def hashear_password(password: str) -> str:
-    """Hashea una contraseña."""
-    return f"hash_{password}"
 

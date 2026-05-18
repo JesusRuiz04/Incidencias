@@ -1,53 +1,327 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incidencias de Tráfico - Reporta en Tiempo Real</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <style>
-        .hero { background: #F5F5F5 !important; padding: 5rem 2rem !important; margin-bottom: 0 !important; }
-        .hero h1 { font-size: 3rem !important; line-height: 1.2 !important; margin-bottom: 1.5rem !important; color: #333 !important; }
-        .hero p { font-size: 1.1rem !important; opacity: 0.8 !important; margin-bottom: 2rem !important; color: #666 !important; }
-        .section-title { font-size: 2rem; font-weight: 700; margin: 3rem 0 2rem 0; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 3rem 0; }
-        .stat-number { font-size: 2.5rem; font-weight: 700; color: var(--primary-color); }
-        .incident-item { display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem; padding: 1.5rem; border-left: 4px solid var(--primary-color); background: var(--white); margin-bottom: 1rem; align-items: center; }
-        .incident-type { background: var(--light-gray); padding: 0.5rem 1rem; border-radius: 0.25rem; font-weight: 600; font-size: 0.85rem; }
-        @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 2rem !important; } .incident-item { grid-template-columns: 1fr; } }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-brand"><h1>Incidencias</h1></div>
-            <ul class="nav-links">
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/login.html">Acceder</a></li>
-            </ul>
-        </div>
-    </nav>
+{% extends "base.html" %}
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h1>Reporta lo que ves. Ayuda a tu comunidad.</h1>
-                <p>Un sistema simple para reportar problemas de tráfico en tiempo real. Sin burocracia.</p>
-                <a href="/login.html" class="btn btn-primary">Comenzar a reportar</a>
+{% block title %}Incidencias de Tráfico - Reporta en Tiempo Real{% endblock %}
+
+{% block extra_css %}
+<style>
+    .features-section {
+        padding: 4rem 2rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .feature-card {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 0.75rem;
+        box-shadow: var(--shadow-md);
+        text-align: center;
+        transition: var(--transition);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: var(--text-color);
+    }
+
+    .feature-card p {
+        color: var(--text-light);
+        line-height: 1.6;
+    }
+
+    .stats-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: #FFFFFF;
+        padding: 4rem 2rem;
+        margin: 4rem 0;
+        border-radius: 0.75rem;
+    }
+
+    .stats-section h2,
+    .stats-section h3,
+    .stats-section h4,
+    .stats-section h5,
+    .stats-section h6 {
+        color: #FFFFFF !important;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .stat-item {
+        text-align: center;
+        color: #FFFFFF;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #FFFFFF !important;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        opacity: 1;
+        color: rgba(255, 255, 255, 0.95);
+    }
+
+    .recent-incidents {
+        padding: 3rem 2rem;
+    }
+
+    .incident-list {
+        display: grid;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .incident-item {
+        background: var(--white);
+        padding: 1.5rem;
+        border-left: 4px solid var(--primary-color);
+        border-radius: 0.5rem;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+        transition: var(--transition);
+    }
+
+    .incident-item:hover {
+        box-shadow: var(--shadow-md);
+    }
+
+    .incident-icon {
+        font-size: 2rem;
+        color: var(--secondary-color);
+        min-width: 50px;
+        text-align: center;
+    }
+
+    .incident-content {
+        flex: 1;
+    }
+
+    .incident-title {
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 0.3rem;
+    }
+
+    .incident-location {
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+
+    .incident-time {
+        color: var(--text-light);
+        font-size: 0.85rem;
+    }
+
+    .incident-status {
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.25rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .status-active {
+        background: #FFE5E5;
+        color: var(--danger);
+    }
+
+    .status-resolved {
+        background: #E8F5E9;
+        color: var(--success);
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: var(--white);
+        padding: 4rem 2rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        margin: 4rem 0;
+    }
+
+    .cta-section h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        opacity: 0.95;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: var(--light-gray);
+        border-radius: 0.75rem;
+        color: var(--text-light);
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        color: #ccc;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1><i class="fas fa-road"></i> Reporta lo que ves. Ayuda a tu comunidad.</h1>
+        <p>Un sistema simple para reportar problemas de tráfico en tiempo real. Sin burocracia.</p>
+        <a href="/login" class="btn btn-primary" style="margin-top: 1rem;">
+            <i class="fas fa-user-plus"></i> Comenzar a Reportar
+        </a>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="stats-section">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 3rem;">Nuestro Impacto</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">847</div>
+                <div class="stat-label">Reportes este mes</div>
             </div>
-        </section>
+            <div class="stat-item">
+                <div class="stat-number">324</div>
+                <div class="stat-label">Resueltos en 48h</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1,204</div>
+                <div class="stat-label">Usuarios activos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Satisfacción</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <div class="container">
-            <section class="stats-grid">
-                <div style="text-align: center;"><div class="stat-number">847</div><p style="color: #666; margin-top: 0.5rem;">Reportes este mes</p></div>
-                <div style="text-align: center;"><div class="stat-number">324</div><p style="color: #666; margin-top: 0.5rem;">Resueltos en 48h</p></div>
-                <div style="text-align: center;"><div class="stat-number">1,204</div><p style="color: #666; margin-top: 0.5rem;">Usuarios activos</p></div>
-            </section>
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <h2 style="text-align: center; color: var(--text-color); margin-bottom: 0.5rem;">¿Por qué elegirnos?</h2>
+        <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">Características que hacen diferencia en la seguridad vial</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-lightning-bolt"></i></div>
+                <h3>Reportes en Tiempo Real</h3>
+                <p>Informa incidencias al instante y ayuda a otros conductores a evitar problemas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-lock"></i></div>
+                <h3>Privacidad Garantizada</h3>
+                <p>Tus datos están protegidos con los más altos estándares de seguridad.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Análisis Detallado</h3>
+                <p>Accede a estadísticas y reportes de incidencias en tu zona.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Fácil de Usar</h3>
+                <p>Interfaz intuitiva diseñada para cualquier dispositivo.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-share-alt"></i></div>
+                <h3>Comunidad Conectada</h3>
+                <p>Sé parte de una red de ciudadanos conscientes de la seguridad vial.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                <h3>Soporte 24/7</h3>
+                <p>Nuestro equipo está disponible para ayudarte en cualquier momento.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-            <section style="margin: 3rem 0;">
-                <h2 class="section-title">Reportes recientes</h2>
-                <p style="text-align: center; color: #999; padding: 2rem;">No hay reportes aún. Sé el primero en reportar una incidencia.</p>
-            </section>
+<!-- Recent Incidents Section -->
+<section class="recent-incidents">
+    <div class="container">
+        <h2 style="color: var(--text-color);">Reportes Recientes</h2>
+        
+        <div class="incident-list">
+            <div class="incident-item">
+                <div class="incident-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="incident-content">
+                    <div class="incident-title">Accidente - Avenida Principal</div>
+                    <div class="incident-location"><i class="fas fa-map-marker-alt"></i> Avenida Principal, km 5</div>
+                    <div class="incident-time"><i class="fas fa-clock"></i> Hace 2 horas</div>
+                </div>
+                <div class="incident-status status-resolved">Resuelto</div>
+            </div>
+
+            <div class="incident-item">
+                <div class="incident-icon"><i class="fas fa-road"></i></div>
+                <div class="incident-content">
+                    <div class="incident-title">Obra en la carretera</div>
+                    <div class="incident-location"><i class="fas fa-map-marker-alt"></i> Calle Central, zona centro</div>
+                    <div class="incident-time"><i class="fas fa-clock"></i> Hace 4 horas</div>
+                </div>
+                <div class="incident-status status-active">Activo</div>
+            </div>
+
+            <div class="incident-item">
+                <div class="incident-icon"><i class="fas fa-traffic-light"></i></div>
+                <div class="incident-content">
+                    <div class="incident-title">Semáforo dañado</div>
+                    <div class="incident-location"><i class="fas fa-map-marker-alt"></i> Intersección Norte</div>
+                    <div class="incident-time"><i class="fas fa-clock"></i> Hace 6 horas</div>
+                </div>
+                <div class="incident-status status-resolved">Resuelto</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <h2>¿Listo para comenzar?</h2>
+        <p>Únete a miles de ciudadanos que ya mejoran la seguridad vial</p>
+        <a href="/login" class="btn" style="background-color: var(--white); color: var(--primary-color); font-weight: 600;">
+            <i class="fas fa-sign-up-alt"></i> Registrarse Ahora
+        </a>
+    </div>
+</section>
+{% endblock %}
 
             <section style="background: var(--light-gray); padding: 3rem 2rem; margin: 3rem 0; border-radius: 0.5rem; text-align: center;">
                 <h2 style="font-size: 2rem; margin-bottom: 1rem;">Listo para reportar tu primer incidencia?</h2>

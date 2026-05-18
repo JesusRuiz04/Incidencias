@@ -1,0 +1,764 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Reporte - Sistema de Incidencias de Tráfico{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        background: var(--white);
+        border-radius: 0.75rem;
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 2rem;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: var(--white);
+        padding: 2rem;
+        border-radius: 0.75rem 0.75rem 0 0;
+        margin: -2rem -2rem 2rem -2rem;
+    }
+
+    .form-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-header p {
+        opacity: 0.9;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+        color: var(--text-color);
+        font-size: 1rem;
+    }
+
+    .form-group label .required {
+        color: var(--danger);
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="date"],
+    .form-group input[type="time"],
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: var(--transition);
+        font-family: inherit;
+        background: var(--white);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(72, 20, 73, 0.1);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .file-upload-group {
+        border: 2px dashed var(--border-color);
+        border-radius: 0.5rem;
+        padding: 2rem;
+        text-align: center;
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+    .file-upload-group:hover {
+        border-color: var(--primary-color);
+        background: var(--light-gray);
+    }
+
+    .file-upload-group input[type="file"] {
+        display: none;
+    }
+
+    .file-upload-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .preview-images {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .preview-image {
+        position: relative;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+    }
+
+    .preview-image img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+    }
+
+    .preview-remove {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: var(--danger);
+        color: var(--white);
+        border: none;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+        opacity: 0;
+        transition: var(--transition);
+    }
+
+    .preview-image:hover .preview-remove {
+        opacity: 1;
+    }
+
+    .form-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 3rem;
+    }
+
+    .form-submit {
+        padding: 1rem;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(72, 20, 73, 0.3);
+    }
+
+    .form-reset {
+        padding: 1rem;
+        background: var(--light-gray);
+        color: var(--text-color);
+        border: 2px solid var(--border-color);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-reset:hover {
+        background: var(--border-color);
+    }
+
+    .message {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+        display: none;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .success-message {
+        background: #E8F5E9;
+        color: var(--success);
+        border-left: 4px solid var(--success);
+        display: none;
+    }
+
+    .error-message {
+        background: #FFE5E5;
+        color: var(--danger);
+        border-left: 4px solid var(--danger);
+        display: none;
+    }
+
+    .help-text {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-top: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 1.5rem;
+        }
+
+        .form-header {
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+            padding: 1.5rem;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .form-buttons {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin-bottom: 4rem;">
+    <div class="form-container">
+        <div class="form-header">
+            <h1><i class="fas fa-file-alt"></i> Crear Reporte de Incidencia</h1>
+            <p>Comparte información sobre problemas de tráfico en tu área</p>
+        </div>
+
+        <!-- Success Message -->
+        <div class="message success-message" id="successMsg">
+            <i class="fas fa-check-circle"></i>
+            <span id="successText">Reporte creado exitosamente</span>
+        </div>
+
+        <!-- Error Message -->
+        <div class="message error-message" id="errorMsg">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText">Hubo un error al crear el reporte</span>
+        </div>
+
+        <form method="POST" action="/crear_reporte" enctype="multipart/form-data" id="reportForm">
+            <!-- Basic Information -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tipo_incidencia">
+                        <i class="fas fa-tag"></i> Tipo de Incidencia <span class="required">*</span>
+                    </label>
+                    <select id="tipo_incidencia" name="tipo_incidencia" required>
+                        <option value="">Selecciona un tipo</option>
+                        <option value="accidente">🚗 Accidente</option>
+                        <option value="congestion">🚦 Congestión</option>
+                        <option value="obra">🚧 Obra en la carretera</option>
+                        <option value="semaforo_danado">⚠️ Semáforo dañado</option>
+                        <option value="bache">🕳️ Bache</option>
+                        <option value="otro">❓ Otro</option>
+                    </select>
+                    <div class="help-text">Selecciona el tipo de incidencia que deseas reportar</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="severidad">
+                        <i class="fas fa-exclamation"></i> Severidad <span class="required">*</span>
+                    </label>
+                    <select id="severidad" name="severidad" required>
+                        <option value="">Selecciona severidad</option>
+                        <option value="baja">🟢 Baja</option>
+                        <option value="media">🟡 Media</option>
+                        <option value="alta">🔴 Alta</option>
+                    </select>
+                    <div class="help-text">Indica el nivel de gravedad de la incidencia</div>
+                </div>
+            </div>
+
+            <!-- Location Information -->
+            <div class="form-group">
+                <label for="ubicacion">
+                    <i class="fas fa-map-marker-alt"></i> Ubicación <span class="required">*</span>
+                </label>
+                <input type="text" id="ubicacion" name="ubicacion" required placeholder="Ej: Avenida Principal, km 5">
+                <div class="help-text">Describe la ubicación lo más específico posible</div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="descripcion">
+                    <i class="fas fa-align-left"></i> Descripción <span class="required">*</span>
+                </label>
+                <textarea id="descripcion" name="descripcion" required placeholder="Describe los detalles de la incidencia..."></textarea>
+                <div class="help-text">Proporciona detalles adicionales que puedan ser útiles</div>
+            </div>
+
+            <!-- Date and Time -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fecha">
+                        <i class="fas fa-calendar"></i> Fecha <span class="required">*</span>
+                    </label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="hora">
+                        <i class="fas fa-clock"></i> Hora
+                    </label>
+                    <input type="time" id="hora" name="hora">
+                </div>
+            </div>
+
+            <!-- Photo Upload -->
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-camera"></i> Fotos (Opcional)
+                </label>
+                <div class="file-upload-group" id="fileUploadGroup">
+                    <div class="file-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <p><strong>Arrastra fotos aquí</strong> o haz clic para seleccionar</p>
+                    <div class="help-text">Formatos soportados: JPG, PNG. Máximo 5MB por imagen</div>
+                    <input type="file" id="fotos" name="fotos" multiple accept="image/*">
+                </div>
+                <div class="preview-images" id="previewContainer"></div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="form-group">
+                <label for="contacto">
+                    <i class="fas fa-user"></i> Contacto (Opcional)
+                </label>
+                <input type="email" id="contacto" name="contacto" placeholder="tu@email.com">
+                <div class="help-text">Para que podamos contactarte si necesitamos más información</div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="form-submit" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i> Enviar Reporte
+                </button>
+                <button type="reset" class="form-reset" id="resetBtn">
+                    <i class="fas fa-redo"></i> Limpiar Formulario
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Navigation Links -->
+    <div style="text-align: center; padding: 2rem 0;">
+        <a href="/dashboard" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver al Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Configurar fecha por defecto
+    const today = new Date();
+    document.getElementById('fecha').valueAsDate = today;
+
+    // Manejo del envío del formulario
+    document.getElementById('reportForm').addEventListener('submit', (e) => {
+        const descripcion = document.getElementById('descripcion').value.trim();
+        
+        if (descripcion.length < 5) {
+            e.preventDefault();
+            alert('La descripción debe tener al menos 5 caracteres');
+            return false;
+        }
+
+        // Mostrar un indicador de carga
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    });
+
+    // Limpiar formulario
+    document.getElementById('resetBtn').addEventListener('click', (e) => {
+        const fileInput = document.getElementById('fotos');
+        const previewContainer = document.getElementById('previewContainer');
+        fileInput.files = new DataTransfer().files;
+        previewContainer.innerHTML = '';
+    });
+</script>
+{% endblock %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-links a, .logout-btn {
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .nav-links a:hover, .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        .reporte-container {
+            max-width: 600px;
+            margin: 80px auto 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+        }
+        .success-message {
+            display: none;
+            padding: 12px;
+            background-color: #d4edda;
+            color: #155724;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            display: none;
+            padding: 12px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .required {
+            color: red;
+        }
+        .photo-upload {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .photo-preview {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        /* Mejoras visuales */
+        label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px !important;
+        }
+
+        input, textarea, select {
+            border: 1px solid #ddd !important;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea !important;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 24px !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .navbar h1 {
+                font-size: 1.2rem;
+            }
+            .nav-links {
+                width: 100%;
+            }
+            .nav-links a, .logout-btn {
+                flex: 1;
+                text-align: center;
+            }
+            .reporte-container {
+                margin: 60px auto 20px;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .reporte-container {
+                margin: 50px 10px 20px;
+                padding: 15px;
+            }
+            button {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>📋 Crear Reporte de Incidencia</h1>
+        <div class="nav-links">
+            <a href="/dashboard">Ver Dashboard</a>
+            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <div class="reporte-container">
+        <div class="success-message" id="successMsg">
+            ✅ Reporte creado exitosamente
+        </div>
+        <div class="error-message" id="errorMsg"></div>
+
+        <form id="reporteForm">
+            <div class="form-group">
+                <label for="titulo">Título <span class="required">*</span></label>
+                <input type="text" id="titulo" name="titulo" placeholder="Ej: Semáforo dañado" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" placeholder="Describe el problema en detalle..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="ubicacion">Ubicación <span class="required">*</span></label>
+                <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Calle Principal y 5ta Avenida" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tipo">Tipo de Incidencia <span class="required">*</span></label>
+                <select id="tipo" name="tipo" required>
+                    <option value="">-- Selecciona un tipo --</option>
+                    <option value="semaforo">Semáforo</option>
+                    <option value="bache">Bache</option>
+                    <option value="poste">Poste</option>
+                    <option value="alcantarilla">Alcantarilla</option>
+                    <option value="señalizacion">Señalización</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="prioridad">Prioridad <span class="required">*</span></label>
+                <select id="prioridad" name="prioridad" required>
+                    <option value="baja">Baja</option>
+                    <option value="media" selected>Media</option>
+                    <option value="alta">Alta</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="foto">Subir Foto</label>
+                <input type="file" id="foto" name="foto" accept="image/*">
+                <div id="fotoPreview"></div>
+            </div>
+
+            <button type="submit">Enviar Reporte</button>
+        </form>
+    </div>
+
+    <script>
+        // Obtener token del localStorage
+        function getToken() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/login.html';
+                return null;
+            }
+            return token;
+        }
+
+        // Verificar autenticación al cargar
+        window.addEventListener('load', () => {
+            if (!getToken()) {
+                window.location.href = '/login.html';
+            }
+        });
+
+        // Manejar cambio de foto
+        document.getElementById('foto').addEventListener('change', async function(e) {
+            const file = this.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/upload-foto', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Mostrar preview
+                    const preview = document.getElementById('fotoPreview');
+                    preview.innerHTML = `<img src="${data.url}" class="photo-preview" alt="Foto">`;
+                    
+                    // Guardar URL de foto
+                    document.getElementById('foto').dataset.url = data.url;
+                } else {
+                    mostrarError(data.detail || 'Error al subir la foto');
+                }
+            } catch (error) {
+                mostrarError('Error al subir la foto: ' + error.message);
+            }
+        });
+
+        document.getElementById('reporteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const token = getToken();
+            if (!token) return;
+
+            const datos = {
+                titulo: document.getElementById('titulo').value,
+                descripcion: document.getElementById('descripcion').value,
+                ubicacion: document.getElementById('ubicacion').value,
+                tipo: document.getElementById('tipo').value,
+                prioridad: document.getElementById('prioridad').value,
+                fotos: document.getElementById('foto').dataset.url || null,
+                estado: "abierto"
+            };
+
+            try {
+                const response = await fetch('/api/crear-reporte', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('successMsg').style.display = 'block';
+                    document.getElementById('reporteForm').reset();
+                    document.getElementById('fotoPreview').innerHTML = '';
+                    delete document.getElementById('foto').dataset.url;
+                    
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 2000);
+                } else {
+                    if (response.status === 401) {
+                        localStorage.removeItem('access_token');
+                        window.location.href = '/login.html';
+                        return;
+                    }
+                    mostrarError(result.detail || 'Error al crear el reporte');
+                }
+            } catch (error) {
+                mostrarError('Error de conexión: ' + error.message);
+            }
+        });
+
+        function mostrarError(mensaje) {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.textContent = mensaje;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function logout() {
+            localStorage.removeItem('access_token');
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

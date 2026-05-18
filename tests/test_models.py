@@ -22,6 +22,8 @@ def test_crear_incidencia():
         ubicacion="123123",
         tipo="semaforo",
         estado="cerrado",
+        prioridad="alta",
+        fotos="foto1.jpg,foto2.jpg"
     )
     assert incidencia.id == 1
     assert incidencia.titulo == "aaa"
@@ -29,6 +31,8 @@ def test_crear_incidencia():
     assert incidencia.ubicacion == "123123"
     assert incidencia.tipo == "semaforo"
     assert incidencia.estado  == "cerrado"
+    assert incidencia.prioridad == "alta"
+    assert incidencia.fotos == "foto1.jpg,foto2.jpg"
 
 def test_usuario_tiene_atributo_fecha():
     usuario = Usuario(

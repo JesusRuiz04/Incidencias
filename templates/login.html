@@ -1,121 +1,268 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autenticación - Sistema de Incidencias</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-brand">
-                <h1>Incidencias Tráfico</h1>
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesión - Sistema de Incidencias de Tráfico{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-container {
+        min-height: calc(100vh - 80px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    .auth-wrapper {
+        width: 100%;
+        max-width: 450px;
+    }
+
+    .auth-box {
+        background: var(--white);
+        border-radius: 1rem;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    .auth-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: var(--white);
+        padding: 3rem 2rem 2rem;
+        text-align: center;
+    }
+
+    .auth-header h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-header p {
+        opacity: 0.9;
+        font-size: 0.95rem;
+    }
+
+    .auth-body {
+        padding: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-color);
+        font-size: 0.95rem;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: var(--transition);
+        font-family: inherit;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(72, 20, 73, 0.1);
+    }
+
+    .form-group input::placeholder {
+        color: #999;
+    }
+
+    .form-submit {
+        width: 100%;
+        padding: 0.9rem;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .form-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(72, 20, 73, 0.3);
+    }
+
+    .form-tabs {
+        display: flex;
+        gap: 0;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 1rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-light);
+        border-bottom: 3px solid transparent;
+        transition: var(--transition);
+        text-align: center;
+    }
+
+    .tab-btn.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+    }
+
+    .tab-btn:hover:not(.active) {
+        color: var(--text-color);
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .error-message {
+        padding: 1rem;
+        background: #FFE5E5;
+        color: var(--danger);
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--danger);
+    }
+
+    .success-message {
+        padding: 1rem;
+        background: #E8F5E9;
+        color: var(--success);
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--success);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-wrapper">
+        <div class="auth-box">
+            <div class="auth-header">
+                <i class="fas fa-shield-alt" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h1>Acceso Seguro</h1>
+                <p>Gestión de Incidencias de Tráfico</p>
             </div>
-            <ul class="nav-links">
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/login.html">Login</a></li>
-            </ul>
+
+            <div class="auth-body">
+                {% if error_message %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i> {{ error_message }}
+                </div>
+                {% endif %}
+
+                {% if success_message %}
+                <div class="success-message">
+                    <i class="fas fa-check-circle"></i> {{ success_message }}
+                </div>
+                {% endif %}
+
+                <div class="form-tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'login')">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </button>
+                    <button class="tab-btn" onclick="switchTab(event, 'register')">
+                        <i class="fas fa-user-plus"></i> Registrarse
+                    </button>
+                </div>
+
+                <!-- LOGIN TAB -->
+                <form id="login" class="tab-content active" method="POST" action="/login">
+                    <div class="form-group">
+                        <label for="login_email">
+                            <i class="fas fa-envelope"></i> Correo Electrónico
+                        </label>
+                        <input type="email" id="login_email" name="email" required placeholder="tu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login_password">
+                            <i class="fas fa-lock"></i> Contraseña
+                        </label>
+                        <input type="password" id="login_password" name="password" required placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="form-submit">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </button>
+                </form>
+
+                <!-- REGISTER TAB -->
+                <form id="register" class="tab-content" method="POST" action="/register">
+                    <div class="form-group">
+                        <label for="register_username">
+                            <i class="fas fa-user"></i> Nombre de Usuario
+                        </label>
+                        <input type="text" id="register_username" name="username" required placeholder="tu_usuario">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register_email">
+                            <i class="fas fa-envelope"></i> Correo Electrónico
+                        </label>
+                        <input type="email" id="register_email" name="email" required placeholder="tu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register_password">
+                            <i class="fas fa-lock"></i> Contraseña
+                        </label>
+                        <input type="password" id="register_password" name="password" required placeholder="••••••••">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register_password_confirm">
+                            <i class="fas fa-lock"></i> Confirmar Contraseña
+                        </label>
+                        <input type="password" id="register_password_confirm" name="password_confirm" required placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="form-submit">
+                        <i class="fas fa-user-plus"></i> Crear Cuenta
+                    </button>
+                </form>
+            </div>
         </div>
-    </nav>
+    </div>
+</div>
+{% endblock %}
 
-    <!-- Main Auth Section -->
-    <main>
-        <section class="auth-container">
-            <div class="auth-box">
-                <!-- Login Form -->
-                <div id="login-section">
-                    <h2>Inicia Sesión</h2>
-                    <form id="form-login">
-                        <input 
-                            type="email" 
-                            placeholder="Tu email" 
-                            required
-                            aria-label="Email">
-                        <input 
-                            type="password" 
-                            placeholder="Tu contraseña" 
-                            required
-                            aria-label="Contraseña">
-                        <button type="submit" class="btn btn-primary">
-                            Inicia Sesión
-                        </button>
-                    </form>
-                    <p class="toggle-text">
-                        ¿No tienes cuenta? 
-                        <a href="#" onclick="toggleForms(event)">Regístrate aquí</a>
-                    </p>
-                </div>
-
-                <!-- Register Form -->
-                <div id="register-section" style="display: none;">
-                    <h2>Crea tu Cuenta</h2>
-                    <form id="form-registro">
-                        <input 
-                            type="text" 
-                            placeholder="Nombre completo" 
-                            required
-                            aria-label="Nombre">
-                        <input 
-                            type="email" 
-                            placeholder="Tu email" 
-                            required
-                            aria-label="Email">
-                        <input 
-                            type="password" 
-                            placeholder="Contraseña" 
-                            required
-                            aria-label="Contraseña">
-                        <input 
-                            type="password" 
-                            placeholder="Confirmar contraseña" 
-                            required
-                            aria-label="Confirmar contraseña">
-                        <button type="submit" class="btn btn-primary">
-                            Registrarse
-                        </button>
-                    </form>
-                    <p class="toggle-text">
-                        ¿Ya tienes cuenta? 
-                        <a href="#" onclick="toggleForms(event)">Inicia sesión aquí</a>
-                    </p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script>
-        function toggleForms(event) {
-            event.preventDefault();
-            const loginSection = document.getElementById('login-section');
-            const registerSection = document.getElementById('register-section');
-            
-            loginSection.style.display = loginSection.style.display === 'none' ? 'block' : 'none';
-            registerSection.style.display = registerSection.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // Handle forms submission
-        document.getElementById('form-login').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Login: Funcionalidad en desarrollo');
-        });
-
-        document.getElementById('form-registro').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Registro: Funcionalidad en desarrollo');
-        });
-    </script>
-</body>
-</html>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Sistema de Gestión de Incidencias de Tráfico</p>
-    </footer>
-
-    <script src="/static/js/auth.js"></script>
-</body>
-</html>
-
+{% block extra_js %}
+<script>
+    function switchTab(event, tabName) {
+        event.preventDefault();
+        
+        // Hide all tabs
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Remove active class from all buttons
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        // Show selected tab
+        document.getElementById(tabName).classList.add('active');
+        event.target.closest('.tab-btn').classList.add('active');
+    }
+</script>
+{% endblock %}

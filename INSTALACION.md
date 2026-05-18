@@ -1,0 +1,596 @@
+# 🚀 Guía de Instalación y Configuración
+
+## Índice
+1. [⚡ Inicio Rápido (5 minutos)](#-inicio-rápido-5-minutos)
+2. [Requisitos Previos](#requisitos-previos)
+3. [Instalación Windows](#instalación-windows)
+4. [Instalación Mac/Linux](#instalación-maclinux)
+5. [Verificación](#verificación)
+6. [Ejecución](#ejecución)
+7. [Características Principales](#características-principales)
+8. [Ejecución de Tests](#ejecución-de-tests)
+9. [Solución de Problemas](#solución-de-problemas)
+
+---
+
+## ⚡ Inicio Rápido (5 minutos)
+
+**Si ya tienes Python y Git instalados, sigue estos pasos:**
+
+### 1️⃣ Instalar Dependencias
+
+```bash
+pip install -r requisitos.txt
+```
+
+### 2️⃣ Crear Base de Datos
+
+```bash
+python seed_db.py
+```
+
+Esto crea 2 usuarios y 8 reportes de ejemplo.
+
+### 3️⃣ Ejecutar Servidor
+
+```bash
+python -m uvicorn src.main:app --reload
+```
+
+Deberías ver:
+```
+INFO:     Uvicorn running on http://127.0.0.1:8000
+```
+
+### 4️⃣ Abrir en Navegador
+
+```
+http://localhost:8000
+```
+
+### 5️⃣ Iniciar Sesión
+
+| Email | Contraseña |
+|-------|-----------|
+| juan@example.com | Password123 |
+| maria@example.com | Password456 |
+
+---
+
+---
+
+## ✅ Requisitos Previos
+
+- **Python 3.10 o superior**
+- **Git** (opcional, para clonar el repositorio)
+- **Terminal/PowerShell**
+- Espacio en disco: ~500 MB
+
+### Verificar Python
+
+```bash
+python --version
+# o
+python3 --version
+```
+
+Debería mostrar: `Python 3.10.x` o superior
+
+---
+
+## 🪟 Instalación Windows
+
+### Paso 1: Descargar el Proyecto
+
+```bash
+# Opción A: Con Git
+git clone <url-del-repositorio>
+cd ProyectoFinal
+
+# Opción B: Descargar ZIP
+# - Descargar ZIP del repositorio
+# - Extraer en una carpeta
+# - Abrir PowerShell en esa carpeta
+```
+
+### Paso 2: Crear Entorno Virtual
+
+```powershell
+python -m venv .venv
+```
+
+### Paso 3: Activar Entorno Virtual
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+**Nota**: Si tienes error de ejecución, ejecuta primero:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+```
+
+Deberías ver `(.venv)` al inicio de la línea de comando.
+
+### Paso 4: Instalar Dependencias
+
+```bash
+pip install -r requisitos.txt
+```
+
+Espera a que complete la instalación (puede tomar 2-3 minutos).
+
+### Paso 5: Crear Base de Datos (Opcional)
+
+```bash
+python seed_db.py
+```
+
+Esto crea:
+- 2 usuarios de prueba
+- 8 reportes de ejemplo
+- Imágenes para los reportes
+
+### Paso 6: Ejecutar Servidor
+
+```bash
+python -m uvicorn src.main:app --reload
+```
+
+Deberías ver:
+```
+INFO:     Uvicorn running on http://127.0.0.1:8000
+```
+
+---
+
+## 🍎 Instalación Mac/Linux
+
+### Paso 1: Descargar el Proyecto
+
+```bash
+# Con Git
+git clone <url-del-repositorio>
+cd ProyectoFinal
+
+# O descargar ZIP manualmente
+```
+
+### Paso 2: Crear Entorno Virtual
+
+```bash
+python3 -m venv .venv
+```
+
+### Paso 3: Activar Entorno Virtual
+
+```bash
+source .venv/bin/activate
+```
+
+Deberías ver `(.venv)` al inicio de la línea.
+
+### Paso 4: Instalar Dependencias
+
+```bash
+pip install -r requisitos.txt
+```
+
+### Paso 5: Crear Base de Datos (Opcional)
+
+```bash
+python seed_db.py
+```
+
+### Paso 6: Ejecutar Servidor
+
+```bash
+python -m uvicorn src.main:app --reload
+```
+
+---
+
+## ✔️ Verificación
+
+### Verificar Instalación Correcta
+
+```bash
+# 1. Verificar que estés en el entorno virtual
+# Deberías ver (.venv) en tu terminal
+
+# 2. Verificar que las dependencias están instaladas
+pip list | grep -E "fastapi|pandas|sqlalchemy"
+
+# 3. Ejecutar los tests
+python -m pytest tests/ -v
+```
+
+Deberías ver: `54 passed in X.XXs`
+
+---
+
+## ▶️ Ejecución
+
+### Opción 1: Modo Desarrollo (Recomendado)
+
+```bash
+python -m uvicorn src.main:app --reload
+```
+
+**Ventajas:**
+- Se reinicia automáticamente al cambiar código
+- Mejor para debugging
+- Mensajes de error detallados
+
+### Opción 2: Modo Producción
+
+```bash
+python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --workers 4
+```
+
+**Ventajas:**
+- Mejor rendimiento
+- Múltiples workers
+
+### Opción 3: Usar Puerto Diferente
+
+```bash
+python -m uvicorn src.main:app --reload --port 9000
+```
+
+Luego accede a `http://localhost:9000`
+
+---
+
+## 🌐 Acceder a la Aplicación
+
+Una vez ejecutado el servidor:
+
+1. Abre tu navegador
+2. Ve a: **http://localhost:8000**
+3. Deberías ver la página de inicio
+
+### URLs Principales
+
+| Página | URL |
+|--------|-----|
+| Inicio | http://localhost:8000 |
+| Login | http://localhost:8000/login.html |
+| Dashboard | http://localhost:8000/dashboard |
+| Crear Reporte | http://localhost:8000/reporte |
+| Análisis | http://localhost:8000/analisis |
+| Documentación API | http://localhost:8000/docs |
+
+### Documentación de API (Swagger)
+
+Accede a: **http://localhost:8000/docs**
+
+Aquí puedes:
+- Ver todos los endpoints
+- Probar endpoints directamente
+- Ver esquemas de request/response
+
+---
+
+## 🎯 Características Principales
+
+### Dashboard
+- `http://localhost:8000/dashboard` - Ver estadísticas y reportes
+
+### Crear Reporte
+- `http://localhost:8000/reporte` - Crear nuevo reporte
+
+### Análisis Avanzado (NUEVO)
+- `http://localhost:8000/analisis` - Análisis con pandas
+
+### API Docs
+- `http://localhost:8000/docs` - Probar endpoints
+
+---
+
+## 🧪 Ejecución de Tests
+
+### Todos los Tests
+
+```bash
+python -m pytest tests/ -v
+```
+
+Deberías ver: `54 passed`
+
+### Tests Específicos
+
+```bash
+# Solo API
+python -m pytest tests/test_api.py -v
+
+# Solo autenticación
+python -m pytest tests/test_auth_service.py -v
+
+# Solo pandas
+python -m pytest tests/test_pandas_analytics.py -v
+
+# Con cobertura
+python -m pytest tests/ --cov=src --cov-report=html
+```
+
+### Reporte de Cobertura
+
+Después de ejecutar con `--cov`:
+
+```bash
+# Ver reporte HTML
+# Abre: htmlcov/index.html en tu navegador
+```
+
+---
+
+## 📊 Preparar Datos de Prueba
+
+### Opción 1: Script Automático
+
+```bash
+python seed_db.py
+```
+
+Crea automáticamente:
+- 2 usuarios
+- 8 reportes
+- Imágenes de ejemplo
+
+**Credenciales:**
+- Email: `juan@example.com`
+- Contraseña: `Password123`
+
+### Opción 2: Crear Manualmente
+
+1. Abre http://localhost:8000/login.html
+2. Haz clic en "Registrarse"
+3. Llena el formulario:
+   - Nombre: Tu nombre
+   - Email: tu@email.com
+   - Contraseña: MinPassword123 (8+ caracteres, mayúscula, minúscula, número)
+4. Haz clic en "Crear Cuenta"
+
+---
+
+## 🔐 Credenciales de Prueba
+
+Después de ejecutar `seed_db.py`:
+
+| Email | Contraseña | Nombre |
+|-------|-----------|--------|
+| juan@example.com | Password123 | Juan Pérez |
+| maria@example.com | Password456 | María García |
+
+---
+
+## 🛑 Detener el Servidor
+
+Presiona `Ctrl+C` en la terminal donde está ejecutándose el servidor.
+
+---
+
+## 🔄 Actualizar Dependencias
+
+```bash
+# Actualizar todas
+pip install --upgrade -r requisitos.txt
+
+# Actualizar una específica
+pip install --upgrade pandas
+```
+
+---
+
+## 🗑️ Limpiar la Instalación
+
+### Eliminar Entorno Virtual
+
+```bash
+# Windows
+rmdir /s /q .venv
+
+# Mac/Linux
+rm -rf .venv
+```
+
+### Eliminar Base de Datos
+
+```bash
+# Windows
+del data\incidencias.db
+
+# Mac/Linux
+rm data/incidencias.db
+```
+
+### Eliminar Caché de Python
+
+```bash
+# Windows
+for /d /r . %d in (__pycache__) do @if exist "%d" rd /s /q "%d"
+
+# Mac/Linux
+find . -type d -name __pycache__ -exec rm -r {} +
+```
+
+---
+
+## 🐛 Solución de Problemas
+
+### Problema 1: Python no encontrado
+
+**Error:**
+```
+python: command not found
+```
+
+**Solución:**
+- Asegúrate de tener Python instalado
+- En Windows, usa `python` en lugar de `python3`
+- En Mac/Linux, usa `python3` en lugar de `python`
+
+### Problema 2: No puedo activar el entorno virtual
+
+**Error:**
+```
+cannot be loaded because running scripts is disabled
+```
+
+**Solución Windows:**
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+.\.venv\Scripts\Activate.ps1
+```
+
+### Problema 3: Las dependencias no se instalan
+
+**Error:**
+```
+ERROR: Could not find a version that satisfies
+```
+
+**Solución:**
+```bash
+# Actualizar pip
+python -m pip install --upgrade pip
+
+# Reinstalar requisitos
+pip install -r requisitos.txt --force-reinstall
+```
+
+### Problema 4: Puerto 8000 ya está en uso
+
+**Error:**
+```
+Address already in use
+```
+
+**Solución:**
+```bash
+# Opción A: Usar puerto diferente
+python -m uvicorn src.main:app --reload --port 9000
+
+# Opción B: Matar proceso en puerto 8000 (Windows)
+netstat -ano | findstr :8000
+taskkill /PID <PID> /F
+
+# Opción C: Matar proceso en puerto 8000 (Mac/Linux)
+lsof -i :8000
+kill -9 <PID>
+```
+
+### Problema 5: "No module named pandas"
+
+```bash
+pip install pandas
+```
+
+### Problema 6: "Database not found"
+
+```bash
+python seed_db.py
+```
+
+### Problema 7: La base de datos no se crea
+
+**Solución:**
+```bash
+# Crear carpeta
+mkdir data
+
+# Luego ejecutar seed_db.py
+python seed_db.py
+```
+
+### Problema 8: Los tests fallan
+
+**Solución:**
+```bash
+# Verificar instalación
+pip install -r requisitos.txt --force-reinstall
+
+# Limpiar caché
+pip cache purge
+
+# Ejecutar tests nuevamente
+python -m pytest tests/ -v
+```
+
+### Problema 9: Las imágenes no se cargan
+
+**Solución:**
+```bash
+# Crear carpeta uploads
+mkdir static/uploads
+
+# Verificar permisos
+# (Windows no requiere, Mac/Linux: chmod 755 static/uploads)
+```
+
+### Problema 10: Pandas no se instala
+
+**Solución:**
+```bash
+# Instalar versión compatible
+pip install pandas==3.0.2
+
+# O instalar dependencias
+pip install numpy pandas
+```
+
+---
+
+## 📝 Notas Importantes
+
+1. **Siempre activar el entorno virtual** antes de trabajar
+2. **Cambiar SECRET_KEY** antes de ir a producción
+3. **Usar variables de entorno** para datos sensibles
+4. **Hacer backup de base de datos** regularmente
+5. **Actualizar dependencias** periódicamente
+
+---
+
+## ✅ Checklist de Instalación
+
+- [ ] Python 3.10+ instalado
+- [ ] Proyecto descargado
+- [ ] Entorno virtual creado
+- [ ] Entorno virtual activado
+- [ ] Dependencias instaladas
+- [ ] Base de datos creada (seed_db.py)
+- [ ] Servidor ejecutándose
+- [ ] Acceso a http://localhost:8000
+- [ ] Tests pasando (54/54)
+- [ ] Credenciales funcionan
+
+---
+
+## 🆘 Obtener Ayuda
+
+1. **Ver logs del servidor**: Están en la terminal
+2. **Revisar documentación API**: http://localhost:8000/docs
+3. **Ejecutar tests**: `python -m pytest tests/ -v`
+4. **Limpiar caché**: `pip cache purge`
+
+---
+
+## 🎉 ¡Instalación Completada!
+
+El sistema está funcionando. ¡Comienza a explorar!
+
+**URLs principales:**
+- Inicio: http://localhost:8000
+- Login: http://localhost:8000/login.html
+- Dashboard: http://localhost:8000/dashboard
+
+Para más información consulta [README.md](README.md)
+
+El sistema está listo para usar. Accede a:
+
+- **Inicio**: http://localhost:8000
+- **Login**: http://localhost:8000/login.html
+- **API Docs**: http://localhost:8000/docs
+
+**¡Disfruta el sistema!** 🚀
