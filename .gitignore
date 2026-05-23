@@ -17,6 +17,11 @@ __pycache__/
 *.db
 *.sqlite
 *.sqlite3
+data/incidencias.db
+
+# Uploads de usuarios
+static/uploads/*
+!static/uploads/.gitkeep
 
 # Carpetas del sistema
 .DS_Store
@@ -27,6 +32,15 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Archivos de distribución
+dist/
+build/
+*.egg-info/
+
+# Cobertura de tests
+htmlcov/
+.coverage
 
 # Archivos de datos
 data/

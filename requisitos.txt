@@ -1,5 +1,6 @@
 # Sistema de Incidencias de Tráfico - Dependencias
 # ================================================
+# Compatible con Python 3.10, 3.11, 3.12 y 3.13
 
 # Testing
 pytest==9.0.2              # Framework de testing
@@ -10,9 +11,9 @@ fastapi==0.104.1          # API REST framework
 uvicorn[standard]==0.24.0 # Servidor ASGI
 
 # Database
-sqlalchemy==2.0.23        # ORM para base de datos
+sqlalchemy==2.0.49        # ORM para base de datos (actualizado para Python 3.13)
 
-# Data Analysis (NUEVO)
+# Data Analysis
 pandas==3.0.2             # Análisis avanzado de datos
 
 # Templates
@@ -24,4 +25,4 @@ passlib[bcrypt]==1.7.4             # Hashing de contraseñas
 
 # File Upload
 python-multipart==0.0.6   # Manejo de uploads multipart
-pillow==10.0.1            # Procesamiento de imágenes
+pillow==12.2.0            # Procesamiento de imágenes (actualizado para Python 3.13)

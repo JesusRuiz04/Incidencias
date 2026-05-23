@@ -9,21 +9,31 @@
 6. [Ejecución](#ejecución)
 7. [Características Principales](#características-principales)
 8. [Ejecución de Tests](#ejecución-de-tests)
-9. [Solución de Problemas](#solución-de-problemas)
+9. [Solución de Problemas](#-solución-de-problemas)
 
 ---
-
+9
 ## ⚡ Inicio Rápido (5 minutos)
 
 **Si ya tienes Python y Git instalados, sigue estos pasos:**
 
-### 1️⃣ Instalar Dependencias
+### 1️⃣ Crear Carpeta de Datos
+
+```bash
+# Windows (PowerShell)
+mkdir data
+
+# Mac/Linux
+mkdir -p data
+```
+
+### 2️⃣ Instalar Dependencias
 
 ```bash
 pip install -r requisitos.txt
 ```
 
-### 2️⃣ Crear Base de Datos
+### 3️⃣ Crear Base de Datos
 
 ```bash
 python seed_db.py
@@ -31,7 +41,7 @@ python seed_db.py
 
 Esto crea 2 usuarios y 8 reportes de ejemplo.
 
-### 3️⃣ Ejecutar Servidor
+### 4️⃣ Ejecutar Servidor
 
 ```bash
 python -m uvicorn src.main:app --reload
@@ -42,13 +52,13 @@ Deberías ver:
 INFO:     Uvicorn running on http://127.0.0.1:8000
 ```
 
-### 4️⃣ Abrir en Navegador
+### 5️⃣ Abrir en Navegador
 
 ```
 http://localhost:8000
 ```
 
-### 5️⃣ Iniciar Sesión
+### 6️⃣ Iniciar Sesión
 
 | Email | Contraseña |
 |-------|-----------|
@@ -61,7 +71,7 @@ http://localhost:8000
 
 ## ✅ Requisitos Previos
 
-- **Python 3.10 o superior**
+- **Python 3.10 o superior** (ver `requisitos.txt` para versiones soportadas)
 - **Git** (opcional, para clonar el repositorio)
 - **Terminal/PowerShell**
 - Espacio en disco: ~500 MB
@@ -74,11 +84,22 @@ python --version
 python3 --version
 ```
 
-Debería mostrar: `Python 3.10.x` o superior
+Debería mostrar Python 3.10 o superior.
 
 ---
 
 ## 🪟 Instalación Windows
+
+### Paso 0: Preparar la Carpeta (IMPORTANTE)
+
+Asegúrate de que existe la carpeta `data/`:
+
+```powershell
+# Si no existe, créala
+mkdir data
+```
+
+**Nota**: Esta carpeta es necesaria para que la base de datos SQLite se cree correctamente.
 
 ### Paso 1: Descargar el Proyecto
 
@@ -145,6 +166,17 @@ INFO:     Uvicorn running on http://127.0.0.1:8000
 ---
 
 ## 🍎 Instalación Mac/Linux
+
+### Paso 0: Preparar la Carpeta (IMPORTANTE)
+
+Asegúrate de que existe la carpeta `data/`:
+
+```bash
+# Si no existe, créala
+mkdir -p data
+```
+
+**Nota**: Esta carpeta es necesaria para que la base de datos SQLite se cree correctamente.
 
 ### Paso 1: Descargar el Proyecto
 
@@ -419,6 +451,41 @@ find . -type d -name __pycache__ -exec rm -r {} +
 
 ## 🐛 Solución de Problemas
 
+### 🔧 Problemas de Compatibilidad Python 3.13
+
+Si tienes errores durante la instalación con Python 3.13, revisa `requisitos.txt` - las versiones están optimizadas para máxima compatibilidad.
+
+#### Problema: Error con Pillow durante la instalación
+
+**Error:**
+```
+KeyError: '__version__'
+```
+
+**Solución:**
+```bash
+# Instalar sin aislamiento de construcción
+pip install pillow --no-build-isolation
+
+# O actualizar
+pip install pillow --upgrade
+```
+
+#### Problema: Error con SQLAlchemy en Python 3.13
+
+**Error:**
+```
+AssertionError: Class directly inherits TypingOnly but has additional attributes
+```
+
+**Solución:**
+```bash
+# Actualizar SQLAlchemy
+pip install --upgrade sqlalchemy
+```
+
+Si los problemas persisten, revisa `requisitos.txt` para las versiones pinned recomendadas.
+
 ### Problema 1: Python no encontrado
 
 **Error:**
@@ -458,6 +525,9 @@ python -m pip install --upgrade pip
 
 # Reinstalar requisitos
 pip install -r requisitos.txt --force-reinstall
+
+# Si sigue fallando, instalar sin cache
+pip install --no-cache-dir -r requisitos.txt
 ```
 
 ### Problema 4: Puerto 8000 ya está en uso
@@ -483,21 +553,35 @@ kill -9 <PID>
 
 ### Problema 5: "No module named pandas"
 
-```bash
-pip install pandas
+**Error:**
 ```
-
-### Problema 6: "Database not found"
-
-```bash
-python seed_db.py
+ModuleNotFoundError: No module named 'pandas'
 ```
-
-### Problema 7: La base de datos no se crea
 
 **Solución:**
 ```bash
-# Crear carpeta
+# Asegúrate de tener activado el entorno virtual
+# Luego instala
+pip install pandas
+```
+
+### Problema 6: "Database not found" o "unable to open database file"
+
+**Error:**
+```
+sqlite3.OperationalError: unable to open database file
+```
+
+**Causa:** La carpeta `data/` no existe
+
+**Solución:**
+```bash
+# Crear la carpeta
+mkdir data
+
+# Luego ejecutar
+python seed_db.py
+```
 mkdir data
 
 # Luego ejecutar seed_db.py
