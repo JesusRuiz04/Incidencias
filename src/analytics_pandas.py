@@ -4,7 +4,7 @@ Análisis avanzado de reportes usando pandas.
 
 import pandas as pd
 from datetime import datetime, timedelta
-from src.models import SessionLocal, Incidencia
+from .models import SessionLocal, Incidencia
 
 
 def obtener_reportes_por_periodo(usuario_id: int, periodo: str = "semanal"):

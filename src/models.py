@@ -6,9 +6,12 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+from pathlib import Path
 
 # Configuración base de datos
-DATABASE_URL = "sqlite:///data/incidencias.db"
+BASE_DIR = Path(__file__).parent.parent
+DATABASE_PATH = BASE_DIR / "data" / "incidencias.db"
+DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()

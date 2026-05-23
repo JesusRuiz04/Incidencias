@@ -9,11 +9,11 @@ from fastapi.responses import FileResponse, RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from typing import List
 from pydantic import BaseModel
-from src.models import Incidencia, Usuario, SessionLocal
-from src.security import create_access_token, verify_token, hash_password, verify_password, ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
-from src.auth_service import validar_email, validar_fuerza_password
+from .models import Incidencia, Usuario, SessionLocal
+from .security import create_access_token, verify_token, hash_password, verify_password, ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
+from .auth_service import validar_email, validar_fuerza_password
 from jose import jwt, JWTError
-from src.analytics_pandas import obtener_reportes_por_periodo, obtener_tendencias, exportar_reportes_csv
+from .analytics_pandas import obtener_reportes_por_periodo, obtener_tendencias, exportar_reportes_csv
 from datetime import timedelta
 from pathlib import Path
 
