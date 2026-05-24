@@ -23,7 +23,7 @@
 
 ## 📝 Backend - API
 
-- [x] **FastAPI** funcionando en puerto 8000
+- [x] **FastAPI** funcionando en puerto 8001
 - [x] **Endpoints implementados** (13 total):
   - [x] POST /api/auth/registro
   - [x] POST /api/auth/login
@@ -220,7 +220,7 @@ ProyectoFinal/
    ```
 
 4. **Acceder a la aplicación**:
-   - Ir a http://localhost:8000
+   - Ir a http://localhost:8001
    - Registrarse o iniciar sesión
    - Crear reportes
    - Ver dashboard

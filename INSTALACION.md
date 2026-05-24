@@ -44,18 +44,19 @@ Esto crea 2 usuarios y 8 reportes de ejemplo.
 ### 4️⃣ Ejecutar Servidor
 
 ```bash
-python -m uvicorn src.main:app --reload
+cd Incidencias
+python -m uvicorn src.main:app --host 127.0.0.1 --port 8001
 ```
 
 Deberías ver:
 ```
-INFO:     Uvicorn running on http://127.0.0.1:8000
+INFO:     Uvicorn running on http://127.0.0.1:8001
 ```
 
 ### 5️⃣ Abrir en Navegador
 
 ```
-http://localhost:8000
+http://localhost:8001
 ```
 
 ### 6️⃣ Iniciar Sesión
@@ -155,12 +156,13 @@ Esto crea:
 ### Paso 6: Ejecutar Servidor
 
 ```bash
-python -m uvicorn src.main:app --reload
+cd Incidencias
+python -m uvicorn src.main:app --host 127.0.0.1 --port 8001
 ```
 
 Deberías ver:
 ```
-INFO:     Uvicorn running on http://127.0.0.1:8000
+INFO:     Uvicorn running on http://127.0.0.1:8001
 ```
 
 ---
@@ -217,8 +219,11 @@ python seed_db.py
 ### Paso 6: Ejecutar Servidor
 
 ```bash
-python -m uvicorn src.main:app --reload
+cd Incidencias
+python -m uvicorn src.main:app --host 127.0.0.1 --port 8001
 ```
+
+Accede a: **http://localhost:8001**
 
 ---
 
@@ -246,18 +251,20 @@ Deberías ver: `54 passed in X.XXs`
 ### Opción 1: Modo Desarrollo (Recomendado)
 
 ```bash
-python -m uvicorn src.main:app --reload
+cd Incidencias
+python -m uvicorn src.main:app --host 127.0.0.1 --port 8001
 ```
 
 **Ventajas:**
-- Se reinicia automáticamente al cambiar código
 - Mejor para debugging
 - Mensajes de error detallados
+- Puerto dedicado para desarrollo
 
 ### Opción 2: Modo Producción
 
 ```bash
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --workers 4
+cd Incidencias
+python -m uvicorn src.main:app --host 0.0.0.0 --port 8001 --workers 4
 ```
 
 **Ventajas:**
@@ -267,7 +274,8 @@ python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --workers 4
 ### Opción 3: Usar Puerto Diferente
 
 ```bash
-python -m uvicorn src.main:app --reload --port 9000
+cd Incidencias
+python -m uvicorn src.main:app --host 127.0.0.1 --port 9000
 ```
 
 Luego accede a `http://localhost:9000`
@@ -279,23 +287,23 @@ Luego accede a `http://localhost:9000`
 Una vez ejecutado el servidor:
 
 1. Abre tu navegador
-2. Ve a: **http://localhost:8000**
+2. Ve a: **http://localhost:8001**
 3. Deberías ver la página de inicio
 
 ### URLs Principales
 
 | Página | URL |
 |--------|-----|
-| Inicio | http://localhost:8000 |
-| Login | http://localhost:8000/login.html |
-| Dashboard | http://localhost:8000/dashboard |
-| Crear Reporte | http://localhost:8000/reporte |
-| Análisis | http://localhost:8000/analisis |
-| Documentación API | http://localhost:8000/docs |
+| Inicio | http://localhost:8001 |
+| Login | http://localhost:8001/login.html |
+| Dashboard | http://localhost:8001/dashboard |
+| Crear Reporte | http://localhost:8001/reporte |
+| Análisis | http://localhost:8001/analisis |
+| Documentación API | http://localhost:8001/docs |
 
 ### Documentación de API (Swagger)
 
-Accede a: **http://localhost:8000/docs**
+Accede a: **http://localhost:8001/docs**
 
 Aquí puedes:
 - Ver todos los endpoints
@@ -307,16 +315,16 @@ Aquí puedes:
 ## 🎯 Características Principales
 
 ### Dashboard
-- `http://localhost:8000/dashboard` - Ver estadísticas y reportes
+- `http://localhost:8001/dashboard` - Ver estadísticas y reportes
 
 ### Crear Reporte
-- `http://localhost:8000/reporte` - Crear nuevo reporte
+- `http://localhost:8001/reporte` - Crear nuevo reporte
 
 ### Análisis Avanzado (NUEVO)
-- `http://localhost:8000/analisis` - Análisis con pandas
+- `http://localhost:8001/analisis` - Análisis con pandas
 
 ### API Docs
-- `http://localhost:8000/docs` - Probar endpoints
+- `http://localhost:8001/docs` - Probar endpoints
 
 ---
 
@@ -376,7 +384,7 @@ Crea automáticamente:
 
 ### Opción 2: Crear Manualmente
 
-1. Abre http://localhost:8000/login.html
+1. Abre http://localhost:8001/login.html
 2. Haz clic en "Registrarse"
 3. Llena el formulario:
    - Nombre: Tu nombre
@@ -530,7 +538,7 @@ pip install -r requisitos.txt --force-reinstall
 pip install --no-cache-dir -r requisitos.txt
 ```
 
-### Problema 4: Puerto 8000 ya está en uso
+### Problema 4: Puerto 8001 ya está en uso
 
 **Error:**
 ```
@@ -540,14 +548,15 @@ Address already in use
 **Solución:**
 ```bash
 # Opción A: Usar puerto diferente
-python -m uvicorn src.main:app --reload --port 9000
+cd Incidencias
+python -m uvicorn src.main:app --host 127.0.0.1 --port 9000
 
-# Opción B: Matar proceso en puerto 8000 (Windows)
-netstat -ano | findstr :8000
+# Opción B: Matar proceso en puerto 8001 (Windows)
+netstat -ano | findstr :8001
 taskkill /PID <PID> /F
 
-# Opción C: Matar proceso en puerto 8000 (Mac/Linux)
-lsof -i :8000
+# Opción C: Matar proceso en puerto 8001 (Mac/Linux)
+lsof -i :8001
 kill -9 <PID>
 ```
 
@@ -645,7 +654,7 @@ pip install numpy pandas
 - [ ] Dependencias instaladas
 - [ ] Base de datos creada (seed_db.py)
 - [ ] Servidor ejecutándose
-- [ ] Acceso a http://localhost:8000
+- [ ] Acceso a http://localhost:8001
 - [ ] Tests pasando (54/54)
 - [ ] Credenciales funcionan
 
@@ -654,7 +663,7 @@ pip install numpy pandas
 ## 🆘 Obtener Ayuda
 
 1. **Ver logs del servidor**: Están en la terminal
-2. **Revisar documentación API**: http://localhost:8000/docs
+2. **Revisar documentación API**: http://localhost:8001/docs
 3. **Ejecutar tests**: `python -m pytest tests/ -v`
 4. **Limpiar caché**: `pip cache purge`
 
@@ -665,16 +674,16 @@ pip install numpy pandas
 El sistema está funcionando. ¡Comienza a explorar!
 
 **URLs principales:**
-- Inicio: http://localhost:8000
-- Login: http://localhost:8000/login.html
-- Dashboard: http://localhost:8000/dashboard
+- Inicio: http://localhost:8001
+- Login: http://localhost:8001/login.html
+- Dashboard: http://localhost:8001/dashboard
 
 Para más información consulta [README.md](README.md)
 
 El sistema está listo para usar. Accede a:
 
-- **Inicio**: http://localhost:8000
-- **Login**: http://localhost:8000/login.html
-- **API Docs**: http://localhost:8000/docs
+- **Inicio**: http://localhost:8001
+- **Login**: http://localhost:8001/login.html
+- **API Docs**: http://localhost:8001/docs
 
 **¡Disfruta el sistema!** 🚀

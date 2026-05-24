@@ -78,9 +78,10 @@ Sistema completo de gestión de reportes de incidencias de tráfico con autentic
 
 6. **Ejecutar servidor**
    ```bash
-   python -m uvicorn src.main:app --reload
+   cd Incidencias
+   python -m uvicorn src.main:app --host 127.0.0.1 --port 8001
    ```
-   Accede a http://localhost:8000
+   Accede a http://localhost:8001
 
 ---
 
@@ -205,7 +206,7 @@ python -m pytest tests/ --cov=src --cov-report=html
 
 ### 🎯 Página de Análisis
 
-Acceda a: **http://localhost:8000/analisis**
+Acceda a: **http://localhost:8001/analisis**
 
 #### **Pestaña 1: Reportes por Período**
 Agrupa reportes por semana o mes y muestra:

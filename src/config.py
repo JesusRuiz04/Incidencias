@@ -85,8 +85,10 @@ LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 ALLOW_ORIGINS = [
     "http://localhost",
     "http://localhost:8000",
+    "http://localhost:8001",
     "http://127.0.0.1",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8001",
 ]
 
 # ==================== MENSAJES ====================
