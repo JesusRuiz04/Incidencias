@@ -19,6 +19,22 @@ from pathlib import Path
 
 app = FastAPI(title="Sistema de Incidencias de Tráfico")
 
+def verify_token_from_header(request: Request) -> dict:
+    """Verifica el token desde el header Authorization (devuelve 401 si falta)."""
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    token = auth_header[7:]
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        usuario_id: str = payload.get("sub")
+        if usuario_id is None:
+            raise HTTPException(status_code=401, detail="Token inválido")
+        return {"usuario_id": int(usuario_id), "sub": usuario_id}
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+
 # Configurar Jinja2Templates con ruta absoluta
 BASE_DIR = Path(__file__).parent.parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
@@ -36,8 +52,15 @@ def render_template(template_name: str, context: dict) -> HTMLResponse:
 # ==================== FUNCIONES DE AUTENTICACIÓN ====================
 
 def obtener_usuario_desde_cookie(request: Request):
-    """Obtiene el usuario logeado desde la cookie del token."""
+    """Obtiene el usuario logeado desde la cookie del token o desde el header Authorization."""
     token = request.cookies.get("access_token")
+    
+    # Si no hay token en cookies, busca en el header Authorization
+    if not token:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header[7:]  # Extrae el token después de "Bearer "
+    
     if not token:
         return None
     
@@ -654,7 +677,7 @@ async def login(usuario: UsuarioLogin):
 @app.post("/api/crear-reporte")
 async def crear_reporte(
     incidencia: IncidenciaCreate,
-    token: dict = Depends(verify_token)
+    token: dict = Depends(verify_token_from_header)
 ):
     """Crea una nueva incidencia/reporte (requiere autenticación)."""
     db = SessionLocal()
@@ -799,6 +822,100 @@ async def exportar_datos(request: Request, formato: str = "csv"):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/reportes")
+async def listar_reportes(
+    token: dict = Depends(verify_token_from_header)
+):
+    """
+    Retorna todos los reportes del usuario autenticado.
+    """
+    db = SessionLocal()
+    try:
+        usuario_id = token.get("usuario_id")
+        
+        reportes = db.query(Incidencia).filter(
+            Incidencia.usuario_id == usuario_id
+        ).order_by(Incidencia.fecha_creacion.desc()).all()
+        
+        resultado = []
+        for reporte in reportes:
+            resultado.append({
+                "id": reporte.id,
+                "titulo": reporte.titulo,
+                "descripcion": reporte.descripcion,
+                "ubicacion": reporte.ubicacion,
+                "tipo": reporte.tipo,
+                "estado": reporte.estado,
+                "prioridad": reporte.prioridad,
+                "fecha_creacion": reporte.fecha_creacion.isoformat() if reporte.fecha_creacion else None
+            })
+        
+        return {"reportes": resultado, "total": len(resultado)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
+
+
+@app.get("/api/estadisticas")
+async def obtener_estadisticas(
+    token: dict = Depends(verify_token_from_header)
+):
+    """
+    Retorna estadísticas de los reportes del usuario.
+    """
+    db = SessionLocal()
+    try:
+        usuario_id = token.get("usuario_id")
+        
+        reportes = db.query(Incidencia).filter(
+            Incidencia.usuario_id == usuario_id
+        ).all()
+        
+        # Contar por estado
+        por_estado = {}
+        for reporte in reportes:
+            por_estado[reporte.estado] = por_estado.get(reporte.estado, 0) + 1
+        
+        # Contar por tipo
+        por_tipo = {}
+        for reporte in reportes:
+            por_tipo[reporte.tipo] = por_tipo.get(reporte.tipo, 0) + 1
+        
+        # Contar por prioridad
+        por_prioridad = {}
+        for reporte in reportes:
+            por_prioridad[reporte.prioridad] = por_prioridad.get(reporte.prioridad, 0) + 1
+        
+        # Reportes recientes (últimos 5)
+        reportes_recientes = [
+            {
+                "id": r.id,
+                "titulo": r.titulo,
+                "tipo": r.tipo,
+                "estado": r.estado,
+                "fecha": r.fecha_creacion.isoformat() if r.fecha_creacion else None
+            }
+            for r in reportes[:5]
+        ]
+        
+        return {
+            "total_reportes": len(reportes),
+            "por_estado": por_estado,
+            "por_tipo": por_tipo,
+            "por_prioridad": por_prioridad,
+            "reportes_recientes": reportes_recientes
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":

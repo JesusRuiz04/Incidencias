@@ -5,9 +5,11 @@
 # Testing
 pytest==9.0.2              # Framework de testing
 pytest-cov==7.1.0         # Cobertura de tests
+httpx==0.25.2              # Cliente HTTP para tests
 
 # Web Framework
 fastapi==0.104.1          # API REST framework
+starlette==0.27.0         # Compatible con FastAPI 0.104.1
 uvicorn[standard]==0.24.0 # Servidor ASGI
 
 # Database

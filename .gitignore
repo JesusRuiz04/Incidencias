@@ -7,6 +7,9 @@ env/
 .env
 *.local
 
+# Presentación (local only)
+PRESENTACION.md
+
 # Cache y temporales
 __pycache__/
 *.py[cod]
